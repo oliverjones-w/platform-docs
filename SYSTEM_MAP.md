@@ -2,7 +2,7 @@
 
 Last updated: 2026-04-24
 
-This document captures current runtime reality across the Dell and Mac copies of the mapping / BBG / dashboard stack.
+This document captures current runtime reality across the file-native intelligence layer, Dell ingestion, and Mac runtime services.
 
 Related operating docs:
 
@@ -11,8 +11,11 @@ Related operating docs:
 
 ## Current Reality
 
+- Obsidian + filesystem is the canonical intelligence interface and source of truth.
+- Agents and deterministic scripts operate the file layer.
+- Databases, APIs, dashboards, and the custom frontend are useful derived layers, not the current architectural center.
 - Dell is the ingestion host for mapping data.
-- Mac is the authoritative runtime host for the frontend, gateway, and app-serving stack.
+- Mac is the runtime host for optional frontend, gateway, and app-serving stack.
 - Tailscale connects Dell to Mac for private transport.
 - Cloudflare Tunnel exposes the Mac-hosted application to `bankst.co`.
 - The Dell `unified_css` clone is a stale local mirror and is not the authoritative frontend source.
@@ -104,6 +107,9 @@ Related operating docs:
 
 | Component | Status | Notes |
 |---|---|---|
+| Obsidian vault `C:\obsidian-vault` | Canonical | File-native intelligence layer: profiles, YAML, raw notes, review queues |
+| YAML / markdown profile state | Canonical | Primary system state for people, firms, strategies, and relationships |
+| Postgres projection | Candidate derived layer | Useful for query/API/frontend, but should be rebuildable from YAML |
 | Dell HF/IR Excel -> SQLite sync | Live | Hourly PowerShell automation on Dell |
 | Dell -> Mac SCP transport over Tailscale | Live | Operational transport leg for SQLite artifacts |
 | Mapping API `:8003` | Live | Current endpoint surface is `hf/*`, `ir/*`, `bbg/*` |
@@ -111,7 +117,7 @@ Related operating docs:
 | BBG frontend UI | Live | `bbg.firms` + `bbg.firm`, drag-drop CSV upload |
 | BBG upload path | Live | UI -> gateway -> `POST /api/bbg/upload` -> pipeline -> SQLite |
 | Mac gateway `:7842` | Live | Main API entry point behind Tailscale |
-| Mac frontend `bankst-os-frontend :3000` | Live | Authoritative frontend runtime |
+| Mac frontend `bankst-os-frontend :3000` | Live / optional | Visualization layer; not canonical for intelligence state |
 | Cloudflare Tunnel -> `bankst.co` | Live | Public serving edge |
 | Dell Caddyfile | Live (dev-only) | Local dev proxy to Mac, not production edge |
 | `mapping_tools/dashboard.py` Streamlit app | Legacy | Superseded by FastAPI mapping API |
@@ -121,8 +127,10 @@ Related operating docs:
 
 ## Key Contrasts With Older Docs
 
+- The system is now file-native first; Obsidian files define intelligence state.
+- Frontend/API/database work is retained as adapter infrastructure, not the defining architecture.
 - The old Streamlit / filesystem BBG workflow is no longer the primary runtime architecture.
-- The Mac, not the Dell, is the authoritative frontend runtime host.
+- The Mac, not the Dell, is the runtime host for optional frontend services.
 - Dell Caddy is a local development proxy, not the production serving layer.
 - Public exposure happens through Cloudflare Tunnel from the Mac to `bankst.co`.
 - BBG is not planned-only; the BBG backend and frontend are both live.
