@@ -11,3 +11,7 @@ System-specific traps. Read when debugging unexpected behavior or before touchin
 - **`bbg_results.db` is NOT on the hourly schedule** — it syncs only on manual BBG pipeline runs, not with the `MappingToolsSync` task
 - **Gateway `/system` route is dead** — no backing process on `:9000`; do not route to it (tracked as SYS-004)
 - **`openclaw` and `finra-scraper` are live PM2 services with no documentation** — port and path unknown; do not assume they are inactive
+- **Port 5050 is held by `encore` in PM2** — `bankst-swarm`'s `server.py` also defaults to 5050; starting it will fail to bind. bankst-swarm is not currently in PM2.
+- **`finra_scraper_claude` uses `venv/` (no dot), not `.venv/`** — the `finra` (API) and `finra-scraper` (worker) PM2 processes share this venv; restart both if you touch it.
+- **The `core` PM2 process runs from inside `apps/bankst-os-frontend/`** — `api.py` at port 8765 is the backend in the same directory as the static frontend. The PM2 name `core` does not imply a separate codebase.
+- **`openclaw` (Cloudflare tunnel) has no PM2 watchdog** — if it crashes, `bankst.co` goes dark while `pm2 list` shows all services green. If users report the site is down and PM2 looks healthy, check `openclaw` first.
