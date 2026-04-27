@@ -69,6 +69,7 @@ set_status() {
 cmd="${1:-}"
 arg="${2:-}"
 msg="${3:-}"
+extra="${4:-}"
 
 case "$cmd" in
     add)
@@ -105,10 +106,16 @@ case "$cmd" in
         ;;
 
     done)
-        [[ -n "$arg" ]] || die "usage: board.sh done <issue-number> [\"summary\"]"
+        [[ -n "$arg" ]] || die "usage: board.sh done <issue-number> [--report file | \"summary\"]"
         item_id=$(get_item_id "$arg")
         set_status "$item_id" "$OPT_DONE"
-        [[ -n "$msg" ]] && gh issue comment "$arg" --repo "$OWNER/$REPO" --body "$msg" > /dev/null
+        if [[ "$msg" == "--report" ]]; then
+            [[ -f "$extra" ]] || die "report file not found: $extra"
+            report_body=$(cat "$extra")
+            gh issue comment "$arg" --repo "$OWNER/$REPO" --body "$report_body" > /dev/null
+        elif [[ -n "$msg" ]]; then
+            gh issue comment "$arg" --repo "$OWNER/$REPO" --body "$msg" > /dev/null
+        fi
         gh issue close "$arg" --repo "$OWNER/$REPO" 2>/dev/null || true
         echo "done: #$arg"
         ;;
@@ -154,8 +161,78 @@ for n in nodes:
 "
         ;;
 
+    review)
+        # Show recently closed issues that contain an Agent Completion Report comment.
+        # Surfaces the "Possible Context Update" section for human triage.
+        gh api graphql -f query="
+        query {
+          repository(owner: \"$OWNER\", name: \"$REPO\") {
+            issues(states: CLOSED, first: 30, orderBy: {field: UPDATED_AT, direction: DESC}) {
+              nodes {
+                number
+                title
+                closedAt
+                comments(last: 3) {
+                  nodes { body }
+                }
+              }
+            }
+          }
+        }" | python3 -c "
+import json, sys, re
+from datetime import datetime, timezone, timedelta
+
+data = json.load(sys.stdin)
+issues = data['data']['repository']['issues']['nodes']
+cutoff = datetime.now(timezone.utc) - timedelta(days=14)
+found = 0
+
+for issue in issues:
+    closed_at = issue.get('closedAt')
+    if not closed_at:
+        continue
+    dt = datetime.fromisoformat(closed_at.replace('Z', '+00:00'))
+    if dt < cutoff:
+        continue
+    comments = issue['comments']['nodes']
+    report_comment = None
+    for c in reversed(comments):
+        if '## Agent Completion Report' in c['body']:
+            report_comment = c['body']
+            break
+    if not report_comment:
+        continue
+
+    found += 1
+    print(f\"\\n{'='*60}\")
+    print(f\"#{issue['number']} — {issue['title']}\")
+    print(f\"Closed: {closed_at[:10]}\")
+
+    # Extract Possible Context Update section
+    match = re.search(
+        r'### Possible Context Update\n(.*?)(?=\n###|\Z)',
+        report_comment, re.DOTALL
+    )
+    if match:
+        print('\\nPossible Context Update:')
+        print(match.group(1).strip())
+
+    # Extract Reusable Lesson
+    match = re.search(
+        r'### Reusable Lesson\n(.*?)(?=\n###|\Z)',
+        report_comment, re.DOTALL
+    )
+    if match:
+        print('\\nReusable Lesson:')
+        print(match.group(1).strip())
+
+if found == 0:
+    print('No agent completion reports found in the last 14 days.')
+"
+        ;;
+
     *)
-        echo "usage: board.sh <add|start|done|todo|list> [args]" >&2
+        echo "usage: board.sh <add|start|done|todo|list|review> [args]" >&2
         exit 1
         ;;
 esac
