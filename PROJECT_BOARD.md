@@ -4,6 +4,8 @@ Last updated: 2026-04-28
 
 This file is the live board of necessary projects. It converts registry issues into concrete work.
 
+> **Agent instruction:** When updating project statuses in this file, also sync the GitHub Projects board at `https://github.com/users/oliverjones-w/projects/2`. Use `gh project item-list 2 --owner oliverjones-w --format json` to list items and IDs, then update status via `gh api graphql` with the `updateProjectV2ItemFieldValue` mutation. Status option IDs: Todo `f75ad846`, In Progress `47fc9ee4`, Done `98236657`. Field ID: `PVTSSF_lAHOCNteG84BV0f8zhRNeZU`. Project ID: `PVT_kwHOCNteG84BV0f8`.
+
 ## How To Use This Board
 
 - Keep projects outcome-based, not task-dump based.
