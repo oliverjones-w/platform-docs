@@ -11,6 +11,7 @@ This repo is the macro view of the system. It is the neutral reference point acr
 
 ## Primary Docs
 
+- [BOOTSTRAP.md](./BOOTSTRAP.md) - device-neutral startup pointer to the canonical context layer
 - [ONBOARDING.md](./ONBOARDING.md) - minimal startup reference for humans and agents
 - [CONTEXT_TREE.md](./CONTEXT_TREE.md) - staged reading paths for efficient agent and human navigation
 - [INFRASTRUCTURE_MAP.md](./INFRASTRUCTURE_MAP.md) - per-machine operational schematic (services, ports, paths, automation)
