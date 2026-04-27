@@ -85,12 +85,10 @@ case "$cmd" in
 
         # Get issue node ID and add to project
         node_id=$(gh api "repos/$OWNER/$REPO/issues/$issue_num" --jq '.node_id')
-        item_id=$(gh api graphql -f query="mutation {
-            addProjectV2ItemById(input: {
-                projectId: \"$PROJECT_ID\"
-                contentId: \"$node_id\"
-            }) { item { id } }
-        }" --jq '.data.addProjectV2ItemById.item.id')
+        item_id=$(gh api graphql \
+            --field query='mutation($pid:ID!,$cid:ID!){addProjectV2ItemById(input:{projectId:$pid,contentId:$cid}){item{id}}}' \
+            --field variables="{\"pid\":\"$PROJECT_ID\",\"cid\":\"$node_id\"}" \
+            --jq '.data.addProjectV2ItemById.item.id')
 
         set_status "$item_id" "$OPT_TODO"
         echo "added: #$issue_num — $arg"
