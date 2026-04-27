@@ -4,24 +4,22 @@
 
 | What | Where |
 |---|---|
-| Live issues and work items | GitHub Issues — `github.com/oliverjones-w` repos |
-| Planning and board | `bankst-os Platform Board` — GitHub Project |
+| Live issues and work items | Linear — `linear.app/bankst-os` |
+| Planning and board | Linear OS team — `linear.app/bankst-os/team/OS` |
 | Runtime health | `LAST_SNAPSHOT.md` — check `Generated:` timestamp before acting on it |
 
-Do not treat this file as a board mirror. For current issue or project status, go to GitHub directly.
+GitHub is code-only. Do not look there for issue or project status.
 
 ## Board Operations
 
-Use `scripts/board.sh` from the `platform-docs` root to add and move tasks:
+The Linear MCP is active in this Claude Code session. When the user says "add this to the board", "mark that in progress", or "log this on the board":
 
-```bash
-bash scripts/board.sh add "Task title"        # create issue, add to board as Todo
-bash scripts/board.sh start <issue-number>    # move to In Progress
-bash scripts/board.sh done <issue-number>     # move to Done, close issue
-bash scripts/board.sh list                    # print current board state
-```
+- Use the Linear MCP tools directly (create issue, update status, etc.)
+- Team: `OS` — workspace: `bankst-os`
+- States: Todo, In Progress, In Review, Blocked, Done
+- Labels: `area:*`, `type:*`, `env:*`
 
-When the user says "add this to the board", "mark that in progress", or "log this on the platform board" — use these commands. The board is `oliverjones-w/projects/2`.
+If the MCP is unavailable, fall back to the Linear GraphQL API directly with the key in `~/.zshrc` (`$LINEAR_API_KEY`). Team ID: `f1d8c5f5-56f6-4379-bf28-73d356b3e355`.
 
 ## Refresh Runtime Snapshot
 
