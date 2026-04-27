@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
-# board.sh — lightweight wrapper for the bankst-os GitHub Projects board
+# board.sh — agent interface to the bankst-os GitHub Projects board
+#
+# Durable object is a real GitHub Issue in oliverjones-w/platform-docs.
+# The Project V2 board is the visibility layer on top.
 #
 # Usage:
-#   board.sh add "Task title"           add new item (Todo)
-#   board.sh start "Task title"         move item to In Progress (by title match)
-#   board.sh done "Task title"          move item to Done (by title match)
-#   board.sh todo "Task title"          move item back to Todo (by title match)
-#   board.sh list                       print all items with current status
+#   board.sh add "Task title"             create issue, add to board as Todo
+#   board.sh start <issue-number>         In Progress + label agent-active
+#   board.sh done <issue-number> ["msg"]  Done + close issue + optional comment
+#   board.sh todo <issue-number>          reopen + move back to Todo
+#   board.sh list                         print board state with issue numbers
 #
-# All IDs are hardcoded — no discovery step needed.
+# All project IDs are hardcoded — no discovery step needed.
 
 set -euo pipefail
 
 OWNER="oliverjones-w"
-PROJECT_NUMBER="2"
+REPO="platform-docs"
 PROJECT_ID="PVT_kwHOCNteG84BV0f8"
 FIELD_ID="PVTSSF_lAHOCNteG84BV0f8zhRNeZU"
 OPT_TODO="f75ad846"
@@ -24,32 +27,28 @@ OPT_DONE="98236657"
 
 die() { echo "error: $*" >&2; exit 1; }
 
-require_title() {
-    [[ -n "${1:-}" ]] || die "title argument required"
-}
-
-# Find item ID by exact or case-insensitive substring match against title.
-# Prints the item ID, or empty string if not found.
-find_item_id() {
-    local title="$1"
-    gh project item-list "$PROJECT_NUMBER" \
-        --owner "$OWNER" \
-        --format json \
-        -L 100 \
-    | python3 -c "
+# Given an issue number, return its project item ID in PROJECT_ID.
+get_item_id() {
+    local number="$1"
+    gh api graphql -f query="
+    query {
+      repository(owner: \"$OWNER\", name: \"$REPO\") {
+        issue(number: $number) {
+          projectItems(first: 10) {
+            nodes { id project { id } }
+          }
+        }
+      }
+    }" | python3 -c "
 import json, sys
-needle = sys.argv[1].lower()
+project_id = sys.argv[1]
 data = json.load(sys.stdin)
-for item in data.get('items', []):
-    if item.get('title', '').lower() == needle:
-        print(item['id'])
-        sys.exit(0)
-# fallback: substring match
-for item in data.get('items', []):
-    if needle in item.get('title', '').lower():
-        print(item['id'])
-        sys.exit(0)
-" "$title"
+nodes = data['data']['repository']['issue']['projectItems']['nodes']
+for n in nodes:
+    if n['project']['id'] == project_id:
+        print(n['id']); sys.exit(0)
+die('issue not found in project')
+" "$PROJECT_ID"
 }
 
 set_status() {
@@ -68,61 +67,95 @@ set_status() {
 # ---------------------------------------------------------------------------
 
 cmd="${1:-}"
-title="${2:-}"
+arg="${2:-}"
+msg="${3:-}"
 
 case "$cmd" in
     add)
-        require_title "$title"
+        [[ -n "$arg" ]] || die "usage: board.sh add \"Task title\""
+
+        # Create real issue in platform-docs
+        issue_url=$(gh issue create \
+            --repo "$OWNER/$REPO" \
+            --title "$arg" \
+            --label "agent-task" \
+            --body "")
+        issue_num=$(basename "$issue_url")
+
+        # Get issue node ID and add to project
+        node_id=$(gh api "repos/$OWNER/$REPO/issues/$issue_num" --jq '.node_id')
         item_id=$(gh api graphql -f query="mutation {
-            addProjectV2DraftIssue(input: {
+            addProjectV2ItemById(input: {
                 projectId: \"$PROJECT_ID\"
-                title: \"$title\"
-            }) { projectItem { id } }
-        }" | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['addProjectV2DraftIssue']['projectItem']['id'])")
-        echo "added: $title ($item_id)"
+                contentId: \"$node_id\"
+            }) { item { id } }
+        }" --jq '.data.addProjectV2ItemById.item.id')
+
+        set_status "$item_id" "$OPT_TODO"
+        echo "added: #$issue_num — $arg"
         ;;
 
     start)
-        require_title "$title"
-        item_id=$(find_item_id "$title")
-        [[ -n "$item_id" ]] || die "no item found matching: $title"
+        [[ -n "$arg" ]] || die "usage: board.sh start <issue-number>"
+        item_id=$(get_item_id "$arg")
         set_status "$item_id" "$OPT_IN_PROGRESS"
-        echo "in progress: $title"
+        gh issue edit "$arg" --repo "$OWNER/$REPO" --add-label "agent-active" 2>/dev/null || true
+        [[ -n "$msg" ]] && gh issue comment "$arg" --repo "$OWNER/$REPO" --body "$msg" > /dev/null
+        echo "in progress: #$arg"
         ;;
 
     done)
-        require_title "$title"
-        item_id=$(find_item_id "$title")
-        [[ -n "$item_id" ]] || die "no item found matching: $title"
+        [[ -n "$arg" ]] || die "usage: board.sh done <issue-number> [\"summary\"]"
+        item_id=$(get_item_id "$arg")
         set_status "$item_id" "$OPT_DONE"
-        echo "done: $title"
+        [[ -n "$msg" ]] && gh issue comment "$arg" --repo "$OWNER/$REPO" --body "$msg" > /dev/null
+        gh issue close "$arg" --repo "$OWNER/$REPO" 2>/dev/null || true
+        echo "done: #$arg"
         ;;
 
     todo)
-        require_title "$title"
-        item_id=$(find_item_id "$title")
-        [[ -n "$item_id" ]] || die "no item found matching: $title"
+        [[ -n "$arg" ]] || die "usage: board.sh todo <issue-number>"
+        item_id=$(get_item_id "$arg")
         set_status "$item_id" "$OPT_TODO"
-        echo "todo: $title"
+        gh issue reopen "$arg" --repo "$OWNER/$REPO" 2>/dev/null || true
+        echo "todo: #$arg"
         ;;
 
     list)
-        gh project item-list "$PROJECT_NUMBER" \
-            --owner "$OWNER" \
-            --format json \
-            -L 100 \
-        | python3 -c "
+        gh api graphql -f query="
+        query {
+          node(id: \"$PROJECT_ID\") {
+            ... on ProjectV2 {
+              items(first: 100) {
+                nodes {
+                  id
+                  status: fieldValueByName(name: \"Status\") {
+                    ... on ProjectV2ItemFieldSingleSelectValue { name }
+                  }
+                  content {
+                    ... on Issue      { number title }
+                    ... on DraftIssue { title }
+                  }
+                }
+              }
+            }
+          }
+        }" | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
-for item in data.get('items', []):
-    status = item.get('status', '?')
-    title  = item.get('title', '')
-    print(f'{status:15} | {title}')
+nodes = data['data']['node']['items']['nodes']
+for n in nodes:
+    status  = (n.get('status') or {}).get('name', '?')
+    content = n.get('content') or {}
+    number  = content.get('number')
+    title   = content.get('title', '(no title)')
+    num_str = f'#{number}' if number else '    '
+    print(f'{status:15} {num_str:6} | {title}')
 "
         ;;
 
     *)
-        echo "usage: board.sh <add|start|done|todo|list> [\"title\"]" >&2
+        echo "usage: board.sh <add|start|done|todo|list> [args]" >&2
         exit 1
         ;;
 esac

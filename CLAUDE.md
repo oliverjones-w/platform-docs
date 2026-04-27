@@ -2,29 +2,37 @@
 
 This repo is the macro context layer for `bankst-os`.
 
-## Start Here
+## When to load agent/ context
 
-Read `agent/ENTRY.md`. It contains canonical naming, machine roles, source-of-truth boundaries, and task routing.
+**Single-repo task** → the product repo CLAUDE.md is sufficient. Do not load agent/ files.
 
-Stop after ENTRY.md unless the task needs deeper context. ENTRY.md tells you exactly which file to read next.
+**Cross-repo, cross-machine, ambiguous ownership, infra/service routing, or architectural task** → read `agent/ENTRY.md`, then stop unless the task needs more.
 
-## Agent Files
+## Task routing
 
-```
-agent/
-  ENTRY.md    canonical naming, machines, source-of-truth, task routing
-  INFRA.md    services, ports, DBs, SSH, SCP, transport — read when task touches infra
-  STATE.md    open issues, project board, last sync snapshot — read when task is operational
-  RULES.md    agent behavioral rules — read when uncertain about ownership or boundaries
-```
+| Task | Read |
+|---|---|
+| Frontend / UI | `agent/ENTRY.md` → Mac `~/workspace/apps/bankst-os-frontend` |
+| Mapping / HF / IR / BBG | `agent/ENTRY.md` → Dell `C:\dev\tools\mapping_tools` |
+| Mac services / ports / DBs | `agent/INFRA_MAC.md` |
+| Dell sync / automation / paths | `agent/INFRA_DELL.md` |
+| Auth / Cloudflare edge | `DECISIONS/ADR-002-auth-model.md` → `CLOUDFLARE_ACCESS.md` |
+| DB / Alembic migrations | `agent/INFRA_MAC.md` → Mac `~/workspace/apps/hf_returns_app/` |
+| Ops / incident | `agent/STATE.md` → `RUNBOOKS/` |
+| Active project or issue | GitHub board → GitHub issue |
+| Unexpected behavior / debugging | `agent/GOTCHAS.md` |
+| Architecture decisions | `DECISIONS/` |
 
-## Human Reference
+## Agent files
 
-The root-level markdown files (SYSTEM_MAP.md, WORKING_RULES.md, ONBOARDING.md, etc.) are the human reference layer. Agents do not need to read them for most tasks.
+| File | Contents |
+|---|---|
+| `agent/ENTRY.md` | Canonical names, machines, source-of-truth table — cross-repo orientation |
+| `agent/INFRA_MAC.md` | Mac services, ports, DBs, SSH — Mac-side tasks |
+| `agent/INFRA_DELL.md` | Dell paths, sync, automation — Dell-side tasks |
+| `agent/STATE.md` | Pointers to GitHub Issues, board, and health snapshot |
+| `agent/GOTCHAS.md` | System-specific traps — read when debugging unexpected behavior |
 
-## Mac Runtime Note
+## Human reference
 
-- PostgreSQL: always `127.0.0.1:5432`, never `localhost` (Tailscale conflict)
-- Creds: `~/.zshrc` as `PGUSER` / `PGPASSWORD`
-- Each service has its own `.venv` — activate before running
-- Full port map and workspace layout: `agent/INFRA.md`
+Root-level markdown files (SYSTEM_MAP.md, WORKING_RULES.md, ONBOARDING.md, etc.) are the human reference layer. Agents do not need them for most tasks.
