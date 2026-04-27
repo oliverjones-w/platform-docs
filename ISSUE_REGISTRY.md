@@ -1,6 +1,6 @@
 # Issue Registry
 
-Last updated: 2026-04-27
+Last updated: 2026-04-28
 
 This file is the durable registry for system-level issues across the Dell / Mac / public-edge stack.
 
@@ -69,14 +69,14 @@ Every issue should carry all of these fields:
 
 - `Class:` Reliability, Data
 - `Severity:` High
-- `Status:` Mitigated
+- `Status:` Closed
 - `Environment:` Dell, Mac, Shared
 - `Owner:` Unassigned
 - `Detected In:` Dell `sync_and_push.ps1` + `logs/sync.log`
 - `Impact:` Mac can continue serving stale HF / IR / BBG mapping data with no obvious user-facing warning.
 - `Trigger / Failure Mode:` Windows Task Scheduler or SCP/Tailscale transfer fails; Dell data refreshes locally but Mac runtime copy stops updating.
-- `Resolution:` `platform-docs/scripts/health_snapshot.sh` exposes per-DB freshness ages from the Mac side with a 90-min stale threshold. Operators and agents can run it without shell access to Dell logs. Verified 2026-04-27.
-- `Next Step:` Optionally surface stale state in the frontend UI (banner/indicator). Not yet implemented.
+- `Resolution:` `platform-docs/scripts/health_snapshot.sh` exposes per-DB freshness ages from the Mac side with a 90-min stale threshold. Operators and agents can run it without shell access to Dell logs. Frontend banner added to `bankst-os-frontend` — reads `/api/mapping/freshness` on load and displays a warning if hf_map or ir_map exceeds the 90-min threshold. Verified 2026-04-28.
+- `Closed:` 2026-04-28
 - `Board Project:` PROJ-002
 
 ### SYS-003 — Frontend Repo Drift Between Dell Mirror And Mac Source Of Truth
