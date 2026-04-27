@@ -46,6 +46,8 @@ pm2 start ecosystem.config.js  # start all
 | `finra` | `8001` | `0.0.0.0` | `services/finra_scraper_claude` |
 | `mapping` | `8003` | `0.0.0.0` | `services/mapping_tools` |
 | `encore` | `5050` | `0.0.0.0` | `services/encore_scraper` |
+| `openclaw` | `?` | `?` | `?` — live but undocumented; needs entry |
+| `finra-scraper` | `?` | `?` | `?` — live but undocumented; needs entry |
 
 ### Gateway Routing
 

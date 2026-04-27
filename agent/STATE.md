@@ -1,6 +1,8 @@
 # System State
 
-Refresh: `bash scripts/health_snapshot.sh --write` (run from Mac)
+> Issues and board below are manually maintained — update when status changes.
+> Health snapshot is time-stamped — check `LAST_SNAPSHOT.md` for generated date before trusting it.
+> To refresh: `bash scripts/health_snapshot.sh --write` (run from Mac).
 
 ## Open Issues
 
@@ -21,18 +23,7 @@ Refresh: `bash scripts/health_snapshot.sh --write` (run from Mac)
 
 PROJ-002 stretch goal outstanding: surface stale state in frontend UI.
 
-## Last Health Snapshot
+## Health Snapshot
 
-Generated: 2026-04-27 00:50:50
-
-| DB | Age | Status |
-|---|---|---|
-| hf_map | 56h 24m | STALE |
-| ir_map | 56h 24m | STALE |
-| bbg_results | 56h 24m | STALE |
-| candidate_sync | 135h 32m | STALE |
-
-Last Dell sync completed: 2026-04-24 16:26:21
-Last error: 2026-04-26 23:29:20 — SCP hf_map.db failed (exit 255)
-
-Run `bash scripts/health_snapshot.sh --write` to update this file with current Mac state.
+See `LAST_SNAPSHOT.md` for current service status and DB freshness ages.
+Check the `Generated:` timestamp at the top before acting on the data — it may be stale.

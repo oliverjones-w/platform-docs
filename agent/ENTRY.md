@@ -15,14 +15,16 @@
 
 ## Source of Truth
 
-| Domain | Authoritative source |
-|---|---|
-| Frontend runtime | Mac `~/workspace/apps/bankst-os-frontend` |
-| Mapping ingestion | Dell `C:\dev\tools\mapping_tools` |
-| Macro system context | `platform-docs` (this repo) |
-| Live work | GitHub Issues + `bankst-os Platform Board` |
-| Auth/edge config | `DECISIONS/ADR-002-auth-model.md` + `CLOUDFLARE_ACCESS.md` |
-| DB schema/migrations | Mac `~/workspace/apps/hf_returns_app/models.py`, Alembic 0001→0009 |
+| Domain | Authoritative source | GitHub |
+|---|---|---|
+| Frontend runtime | Mac `~/workspace/apps/bankst-os-frontend` | `oliverjones-w/bankst-os-frontend` |
+| Mapping ingestion | Dell `C:\dev\tools\mapping_tools` | `oliverjones-w/mapping_tools` |
+| Macro system context | `platform-docs` (this repo) | `oliverjones-w/platform-docs` |
+| Live work | GitHub Issues + `bankst-os Platform Board` | — |
+| Auth/edge config | `DECISIONS/ADR-002-auth-model.md` + `CLOUDFLARE_ACCESS.md` | — |
+| DB schema/migrations | Mac `~/workspace/apps/hf_returns_app/models.py`, Alembic 0001→0009 | — |
+| Swarm / agent layer | Mac `~/workspace/services/bankst-swarm` | `oliverjones-w/bankst-swarm` |
+| Encore scraper | Mac `~/workspace/services/encore_scraper` | `oliverjones-w/encore_scraper` |
 
 Dell `labs/unified_css` is a stale frontend mirror. It is not authoritative.
 
