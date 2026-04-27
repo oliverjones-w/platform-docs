@@ -12,6 +12,7 @@ This repo is the macro view of the system. It is the neutral reference point acr
 ## Primary Docs
 
 - [ONBOARDING.md](./ONBOARDING.md) - minimal startup reference for humans and agents
+- [CONTEXT_TREE.md](./CONTEXT_TREE.md) - staged reading paths for efficient agent and human navigation
 - [INFRASTRUCTURE_MAP.md](./INFRASTRUCTURE_MAP.md) - per-machine operational schematic (services, ports, paths, automation)
 - [SYSTEM_MAP.md](./SYSTEM_MAP.md) - current runtime architecture and host responsibilities
 - [NAMING.md](./NAMING.md) - canonical project, product, and domain naming
