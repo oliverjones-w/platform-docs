@@ -19,6 +19,7 @@ It is not a product repo and it is not a runtime service.
 | Component | Role | Canonical home |
 |---|---|---|
 | `platform-docs` | macro system context | `oliverjones-w/platform-docs` |
+| Obsidian vault | canonical intelligence interface and file state | `C:\obsidian-vault` |
 | Linear | work items, risks, projects, incidents | `linear.app/bankst-os/team/OS` |
 | ADRs | durable architecture decisions | `platform-docs/DECISIONS/` |
 | Runbooks | recovery / operator procedures | `platform-docs/RUNBOOKS/` |
@@ -28,6 +29,7 @@ It is not a product repo and it is not a runtime service.
 
 - naming conventions
 - source-of-truth boundaries
+- file-native system philosophy
 - system maps
 - issue / board operating rules
 - architectural decision memory
@@ -59,15 +61,18 @@ It is not a product repo and it is not a runtime service.
 ## Operating Loop
 
 1. System context comes from `platform-docs`
-2. Active work is selected from Linear
-3. Implementation happens in the owning repo
-4. If architecture or process changed, update the control plane
+2. Canonical intelligence state lives in Obsidian files
+3. Active work is selected from Linear
+4. Implementation happens in the owning repo or vault automation layer
+5. If architecture or process changed, update the control plane
 
 ## Source Of Truth Rules
 
 - `platform-docs` is the source of truth for macro context
+- `C:\obsidian-vault` is the source of truth for intelligence objects, relationships, raw notes, and human-readable system state
 - Linear is the source of truth for active work
 - product repos are the source of truth for implementation
+- databases, APIs, dashboards, and frontends are derived or optional layers unless explicitly documented otherwise
 
 If two places disagree:
 
@@ -81,6 +86,7 @@ The control plane is healthy when:
 - every important work item has a Linear issue
 - the board reflects current priorities
 - source-of-truth boundaries are explicit
+- files remain canonical where the system is representing intelligence
 - agents can route themselves to the right repo with minimal context load
 - stale local mirrors do not masquerade as authoritative repos
 

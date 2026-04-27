@@ -4,6 +4,7 @@ Cross-repo platform documentation for the bankst-os stack.
 
 This repo is the macro view of the system. It is the neutral reference point across:
 
+- Obsidian / filesystem source-of-truth design
 - Dell ingestion and automation
 - Mac runtime and gateway
 - public edge / Cloudflare exposure
@@ -12,6 +13,7 @@ This repo is the macro view of the system. It is the neutral reference point acr
 ## Primary Docs
 
 - [CONTROL_PLANE.md](./CONTROL_PLANE.md) - explicit definition of the shared operating layer across repos, devices, humans, and agents
+- [FILE_NATIVE_SYSTEM.md](./FILE_NATIVE_SYSTEM.md) - current architecture philosophy: Obsidian is the interface, files are the system, agents are the operators
 - [BOOTSTRAP.md](./BOOTSTRAP.md) - device-neutral startup pointer to the canonical context layer
 - [ONBOARDING.md](./ONBOARDING.md) - minimal startup reference for humans and agents
 - [CONTEXT_TREE.md](./CONTEXT_TREE.md) - staged reading paths for efficient agent and human navigation
@@ -34,5 +36,6 @@ This repo is the macro view of the system. It is the neutral reference point acr
 
 - Product repos own implementation details.
 - `platform-docs` owns cross-repo system context.
+- The Obsidian vault owns canonical intelligence files.
 - Linear should be the live execution layer (`linear.app/bankst-os/team/OS`).
 - Markdown here should explain the system, not replace the issue tracker.

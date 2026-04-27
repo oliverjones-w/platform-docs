@@ -16,10 +16,22 @@ Purpose: minimal source-of-truth and accountability map.
 - Owns: macro system context, operating rules, onboarding, runbooks, ADRs
 - Does not own: implementation details inside product repos
 
+### Obsidian vault
+
+- Canonical repo/runtime: `C:\obsidian-vault`
+- Owns: candidate profiles, firm profiles, strategy notes, raw notes, review queues, relationship-bearing YAML, and local intelligence automation conventions
+- Does not own: derived database projections, external API availability, or productized frontend behavior
+
+### Derived data stores
+
+- Canonical repo/runtime: owning sync/indexer repo or service
+- Owns: efficient query, analytics, API serving, search, and optional visualization
+- Does not own: canonical identity or intelligence facts unless changes are written back to files with explicit conflict handling
+
 ### Mac frontend runtime
 
 - Canonical repo/runtime: `bankst-os-frontend`
-- Owns: frontend runtime behavior
+- Owns: optional frontend runtime behavior and visualization
 
 ### Dell mapping environment
 
