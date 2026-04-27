@@ -1,6 +1,6 @@
 # platform-docs
 
-Cross-repo platform documentation for the Bay Street / bankst stack.
+Cross-repo platform documentation for the bankst-os stack.
 
 This repo is the macro view of the system. It is the neutral reference point across:
 
@@ -11,7 +11,13 @@ This repo is the macro view of the system. It is the neutral reference point acr
 
 ## Primary Docs
 
+- [ONBOARDING.md](./ONBOARDING.md) - minimal startup reference for humans and agents
+- [INFRASTRUCTURE_MAP.md](./INFRASTRUCTURE_MAP.md) - per-machine operational schematic (services, ports, paths, automation)
 - [SYSTEM_MAP.md](./SYSTEM_MAP.md) - current runtime architecture and host responsibilities
+- [NAMING.md](./NAMING.md) - canonical project, product, and domain naming
+- [OWNERSHIP.md](./OWNERSHIP.md) - minimal source-of-truth and accountability map
+- [WORKING_RULES.md](./WORKING_RULES.md) - engineering operating rules for humans and agents
+- [CLOUDFLARE_ACCESS.md](./CLOUDFLARE_ACCESS.md) - edge auth configuration, API access, and policy management
 - [ISSUE_REGISTRY.md](./ISSUE_REGISTRY.md) - durable system-level issue registry
 - [PROJECT_BOARD.md](./PROJECT_BOARD.md) - live board of active and queued projects
 
