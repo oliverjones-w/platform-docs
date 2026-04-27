@@ -1,6 +1,6 @@
 # Issue Registry
 
-Last updated: 2026-04-24
+Last updated: 2026-04-27
 
 This file is the durable registry for system-level issues across the Dell / Mac / public-edge stack.
 
@@ -55,26 +55,28 @@ Every issue should carry all of these fields:
 
 - `Class:` Security
 - `Severity:` Critical
-- `Status:` Open
+- `Status:` Closed
 - `Environment:` Mac, Public Edge
 - `Owner:` Unassigned
 - `Detected In:` cross-repo architecture review
 - `Impact:` Sensitive hedge fund / firm / returns data may be accessible without a proper identity gate.
 - `Trigger / Failure Mode:` Public traffic reaches the Mac-hosted application through Cloudflare Tunnel, while the gateway/service layer has no confirmed application-level auth enforcement.
-- `Next Step:` Decide and implement the first-line auth model: Cloudflare Access, gateway auth middleware, or both.
+- `Resolution:` Cloudflare Access confirmed live on `bankst.co` + `*.bankst.co` wildcard. All gateway-routed services covered. Email allowlist verified 2026-04-27. See `DECISIONS/ADR-002-auth-model.md` and `CLOUDFLARE_ACCESS.md`.
+- `Closed:` 2026-04-27
 - `Board Project:` PROJ-001
 
 ### SYS-002 — Silent Stale Mapping Data If Dell -> Mac Sync Fails
 
 - `Class:` Reliability, Data
 - `Severity:` High
-- `Status:` Open
+- `Status:` Mitigated
 - `Environment:` Dell, Mac, Shared
 - `Owner:` Unassigned
 - `Detected In:` Dell `sync_and_push.ps1` + `logs/sync.log`
 - `Impact:` Mac can continue serving stale HF / IR / BBG mapping data with no obvious user-facing warning.
 - `Trigger / Failure Mode:` Windows Task Scheduler or SCP/Tailscale transfer fails; Dell data refreshes locally but Mac runtime copy stops updating.
-- `Next Step:` Add sync freshness reporting on the Mac side and alerting / UI visibility when data age exceeds threshold.
+- `Resolution:` `platform-docs/scripts/health_snapshot.sh` exposes per-DB freshness ages from the Mac side with a 90-min stale threshold. Operators and agents can run it without shell access to Dell logs. Verified 2026-04-27.
+- `Next Step:` Optionally surface stale state in the frontend UI (banner/indicator). Not yet implemented.
 - `Board Project:` PROJ-002
 
 ### SYS-003 — Frontend Repo Drift Between Dell Mirror And Mac Source Of Truth
@@ -102,6 +104,20 @@ Every issue should carry all of these fields:
 - `Trigger / Failure Mode:` Route remains configured with no backing process or ownership.
 - `Next Step:` Either document intended owner/service or remove the dead route.
 - `Board Project:` PROJ-004
+
+### SYS-005 — PowerShell `$ErrorActionPreference = Stop` Breaks Sync On Native Command Stderr
+
+- `Class:` Reliability
+- `Severity:` High
+- `Status:` Closed
+- `Environment:` Dell
+- `Owner:` Unassigned
+- `Detected In:` `mapping_tools/scripts/sync_and_push.ps1` manual run 2026-04-27
+- `Impact:` The hourly MappingToolsSync scheduled task silently exits 0 but skips all logging and sync work, leaving Mac serving stale data indefinitely.
+- `Trigger / Failure Mode:` `$ErrorActionPreference = "Stop"` at script scope causes PowerShell to treat native command stderr output (e.g. openpyxl `UserWarning`) as a terminating error inside `Invoke-LoggedCommand`. The function throws before checking `$LASTEXITCODE`, even when Python exits 0.
+- `Resolution:` `Invoke-LoggedCommand` now sets `$ErrorActionPreference = 'Continue'` locally and explicitly casts `ErrorRecord` objects to strings when logging. Exit code is checked explicitly. Fixed in `sync_and_push.ps1` 2026-04-27. Verified full sync completes cleanly.
+- `Closed:` 2026-04-27
+- `Board Project:` PROJ-002
 
 ## Intake Rules
 
