@@ -83,12 +83,12 @@ case "$cmd" in
             --body "")
         issue_num=$(basename "$issue_url")
 
-        # Get issue node ID and add to project
-        node_id=$(gh api "repos/$OWNER/$REPO/issues/$issue_num" --jq '.node_id')
-        item_id=$(gh api graphql \
-            --field query='mutation($pid:ID!,$cid:ID!){addProjectV2ItemById(input:{projectId:$pid,contentId:$cid}){item{id}}}' \
-            --field variables="{\"pid\":\"$PROJECT_ID\",\"cid\":\"$node_id\"}" \
-            --jq '.data.addProjectV2ItemById.item.id')
+        # Add to project via CLI (more reliable than GraphQL mutation)
+        item_id=$(gh project item-add 2 \
+            --owner "$OWNER" \
+            --url "https://github.com/$OWNER/$REPO/issues/$issue_num" \
+            --format json | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['id'])")
+        [[ -n "$item_id" ]] || die "failed to add issue #$issue_num to project"
 
         set_status "$item_id" "$OPT_TODO"
         echo "added: #$issue_num — $arg"
@@ -127,19 +127,20 @@ case "$cmd" in
         ;;
 
     list)
+        # Query from the issue side — the project.items list has a GitHub API
+        # caching bug that returns 0 items. Issue.projectItems is reliable.
         gh api graphql -f query="
         query {
-          node(id: \"$PROJECT_ID\") {
-            ... on ProjectV2 {
-              items(first: 100) {
-                nodes {
-                  id
-                  status: fieldValueByName(name: \"Status\") {
-                    ... on ProjectV2ItemFieldSingleSelectValue { name }
-                  }
-                  content {
-                    ... on Issue      { number title }
-                    ... on DraftIssue { title }
+          repository(owner: \"$OWNER\", name: \"$REPO\") {
+            issues(first: 100, orderBy: {field: CREATED_AT, direction: ASC}) {
+              nodes {
+                number title state
+                projectItems(first: 5) {
+                  nodes {
+                    project { id }
+                    status: fieldValueByName(name: \"Status\") {
+                      ... on ProjectV2ItemFieldSingleSelectValue { name }
+                    }
                   }
                 }
               }
@@ -147,16 +148,16 @@ case "$cmd" in
           }
         }" | python3 -c "
 import json, sys
+project_id = sys.argv[1]
 data = json.load(sys.stdin)
-nodes = data['data']['node']['items']['nodes']
-for n in nodes:
-    status  = (n.get('status') or {}).get('name', '?')
-    content = n.get('content') or {}
-    number  = content.get('number')
-    title   = content.get('title', '(no title)')
-    num_str = f'#{number}' if number else '    '
-    print(f'{status:15} {num_str:6} | {title}')
-"
+issues = data['data']['repository']['issues']['nodes']
+for issue in issues:
+    for pi in issue['projectItems']['nodes']:
+        if pi['project']['id'] == project_id:
+            status = (pi.get('status') or {}).get('name', '?')
+            print(f\"{status:15} #{issue['number']:<4} | {issue['title']}\")
+            break
+" "$PROJECT_ID"
         ;;
 
     review)
