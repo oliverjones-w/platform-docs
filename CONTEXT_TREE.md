@@ -189,7 +189,6 @@ If uncertain, the shortest safe sequence is:
 
 Then stop and decide whether more context is actually needed.
 
-## Open Items
+## Agent Bootstrap
 
-- Placeholder: repo-local pointer convention not yet standardized
-- Placeholder: agent bootstrap preload mechanism not yet standardized
+Agents use `agent/ENTRY.md` as the primary entry point. CLAUDE.md handles auto-loading. The `agent/` directory is the agent-optimized reading path — agents do not need to follow this context tree.

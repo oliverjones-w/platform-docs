@@ -31,7 +31,6 @@ Purpose: minimal startup reference for any human or agent entering the `bankst-o
 - check the docs listed above
 - escalate by updating the relevant issue or opening a new one
 
-## Open Items
+## Agent Bootstrap
 
-- Placeholder: agent bootstrap/loading process not yet finalized
-- Placeholder: repo-local startup pointer convention not yet finalized
+Agents: read `agent/ENTRY.md` first. CLAUDE.md auto-loads when working inside this repo.
