@@ -35,7 +35,7 @@ Every issue should carry all of these fields:
 | `Impact` | What can go wrong |
 | `Trigger / Failure Mode` | How it manifests |
 | `Next Step` | Immediate action to move it forward |
-| `Board Project` | Which project board item owns it |
+| `Linear Issue` | Which Linear issue owns it (`OS-N`) |
 
 ## Status Meanings
 

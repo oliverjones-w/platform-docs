@@ -14,7 +14,7 @@ Purpose: minimal startup reference for any human or agent entering the `bankst-o
 ## Canonical Sources
 
 - Macro system context: `platform-docs`
-- Live work tracking: GitHub Issues + `bankst-os Platform Board`
+- Live work tracking: Linear — `linear.app/bankst-os/team/OS`
 - Frontend runtime truth: Mac-hosted `bankst-os-frontend`
 - Mapping ingestion truth: Dell `mapping_tools`
 

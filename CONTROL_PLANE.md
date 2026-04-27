@@ -19,8 +19,7 @@ It is not a product repo and it is not a runtime service.
 | Component | Role | Canonical home |
 |---|---|---|
 | `platform-docs` | macro system context | `oliverjones-w/platform-docs` |
-| GitHub Issues | work items, risks, projects, incidents | GitHub |
-| GitHub Project | live operating board | `bankst-os Platform Board` |
+| Linear | work items, risks, projects, incidents | `linear.app/bankst-os/team/OS` |
 | ADRs | durable architecture decisions | `platform-docs/DECISIONS/` |
 | Runbooks | recovery / operator procedures | `platform-docs/RUNBOOKS/` |
 | Agent bootstrap | shortest context path for agents | `platform-docs/agent/` |
@@ -60,14 +59,14 @@ It is not a product repo and it is not a runtime service.
 ## Operating Loop
 
 1. System context comes from `platform-docs`
-2. Active work is selected from GitHub Issues / Project
+2. Active work is selected from Linear
 3. Implementation happens in the owning repo
 4. If architecture or process changed, update the control plane
 
 ## Source Of Truth Rules
 
 - `platform-docs` is the source of truth for macro context
-- GitHub Issues / Project are the source of truth for active work
+- Linear is the source of truth for active work
 - product repos are the source of truth for implementation
 
 If two places disagree:
@@ -79,7 +78,7 @@ If two places disagree:
 
 The control plane is healthy when:
 
-- every important work item has a GitHub issue
+- every important work item has a Linear issue
 - the board reflects current priorities
 - source-of-truth boundaries are explicit
 - agents can route themselves to the right repo with minimal context load

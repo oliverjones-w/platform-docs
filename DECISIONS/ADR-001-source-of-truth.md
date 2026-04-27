@@ -10,7 +10,7 @@ This project spans multiple repos and multiple machines. Confusion about source-
 ## Current Working Boundaries
 
 - `platform-docs` = macro system context
-- GitHub board/issues = live work tracking
+- Linear = live work tracking (`linear.app/bankst-os/team/OS`)
 - Mac `bankst-os-frontend` = authoritative frontend runtime/source
 - Dell `mapping_tools` = authoritative mapping ingestion automation/source
 

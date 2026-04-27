@@ -77,10 +77,9 @@ When to stop:
 
 Read when the task is tied to current execution:
 
-1. GitHub issue
-2. `bankst-os Platform Board`
-3. [ISSUE_REGISTRY.md](./ISSUE_REGISTRY.md) if needed
-4. [PROJECT_BOARD.md](./PROJECT_BOARD.md) as reference only
+1. Linear issue (`linear.app/bankst-os/team/OS`)
+2. [ISSUE_REGISTRY.md](./ISSUE_REGISTRY.md) if needed
+3. [PROJECT_BOARD.md](./PROJECT_BOARD.md) as reference only
 
 What you get:
 
@@ -139,7 +138,7 @@ Read:
 3. `OWNERSHIP.md`
 4. `WORKING_RULES.md`
 5. `SYSTEM_MAP.md`
-6. relevant GitHub issue/board item
+6. relevant Linear issue/board item
 
 ### If the task is auth/security
 
@@ -148,7 +147,7 @@ Read:
 1. `ONBOARDING.md`
 2. `OWNERSHIP.md`
 3. `SYSTEM_MAP.md`
-4. relevant GitHub auth issue
+4. relevant Linear auth issue
 5. relevant ADR in `DECISIONS/`
 
 ### If the task is runtime/ops
@@ -168,7 +167,7 @@ Read:
 1. `ONBOARDING.md`
 2. `SYSTEM_MAP.md`
 3. relevant runbook
-4. relevant GitHub issue if follow-through is needed
+4. relevant Linear issue if follow-through is needed
 
 ## Token Preservation Rules
 

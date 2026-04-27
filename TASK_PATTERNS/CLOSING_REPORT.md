@@ -1,11 +1,8 @@
 # Closing Report Template
 
-Use this format when calling `board.sh done <issue> --report <file>`.
-Save as a temp file (e.g. `report.md`), then run:
+Post this as a comment on the Linear issue, then move the issue to Done.
 
-```bash
-bash scripts/board.sh done 123 --report report.md
-```
+Via Linear MCP: `create_comment` on the issue, then `update_issue` with `stateId` = Done state.
 
 ---
 

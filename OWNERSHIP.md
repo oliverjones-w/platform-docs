@@ -28,7 +28,7 @@ Purpose: minimal source-of-truth and accountability map.
 
 ## Issue Ownership Convention
 
-- GitHub issue assignee = accountable human owner
+- Linear issue assignee = accountable human owner
 - Agents may execute work, but are not the canonical assignee
 
 ## Open Items

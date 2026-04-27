@@ -34,5 +34,5 @@ This repo is the macro view of the system. It is the neutral reference point acr
 
 - Product repos own implementation details.
 - `platform-docs` owns cross-repo system context.
-- GitHub Issues / Projects should be the live execution layer.
+- Linear should be the live execution layer (`linear.app/bankst-os/team/OS`).
 - Markdown here should explain the system, not replace the issue tracker.

@@ -24,10 +24,9 @@ Use GitHub as the canonical source. Use a local clone only for convenience.
 
 ## Live Work
 
-Execution tracking lives in:
+Execution tracking lives in Linear:
 
-- GitHub Issues
-- GitHub Project: `bankst-os Platform Board`
+- `linear.app/bankst-os/team/OS`
 
 ## If You Started In Another Repo
 
@@ -40,5 +39,5 @@ If you were loaded into a product repo first:
 ## Minimum Takeaway
 
 - `platform-docs` = macro context
-- GitHub board/issues = live work
+- Linear = live work
 - local repos = implementation context

@@ -10,14 +10,14 @@ Reusable patterns promoted from agent completion reports.
 
 ## What does not belong here
 
-- One-off debug notes (those belong in GitHub issue comments)
+- One-off debug notes (those belong in Linear issue comments)
 - In-progress investigations
 - Decisions about architecture (those belong in DECISIONS/)
 - Recovery procedures for known failures (those belong in RUNBOOKS/)
 
 ## Promotion path
 
-Agent completion report → human triage (`board.sh review`) → if pattern is reusable → add here
+Agent completion report → Linear issue comment → human triage → if pattern is reusable → add here
 
 ## Index
 

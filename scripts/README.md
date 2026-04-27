@@ -7,7 +7,7 @@ This directory is for scripts that help with:
 - system visibility
 - platform health checks
 - documentation/bootstrap workflows
-- GitHub/project setup and maintenance
+- platform tooling and maintenance
 
 ## What Belongs Here
 
@@ -24,5 +24,6 @@ This directory is for scripts that help with:
 
 ## Current Scripts
 
-- `seed_github_issues.sh` - bootstraps labels and issues for the GitHub operating layer
 - `health_snapshot.sh` - cross-machine health snapshot for the live stack
+- `board.sh` - deprecated; was GitHub Projects interface (now replaced by Linear MCP)
+- `seed_github_issues.sh` - deprecated; was GitHub issue bootstrapper

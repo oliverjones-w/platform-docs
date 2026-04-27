@@ -13,7 +13,7 @@ The company should operate from shared systems, not private memory.
 That means:
 
 - cross-repo context belongs in `platform-docs`
-- live work belongs in GitHub Issues and the GitHub Project board
+- live work belongs in Linear
 - implementation details belong in the relevant product repo
 
 ## Canonical Tools
@@ -33,9 +33,9 @@ Use `platform-docs` for:
 
 Do not use it as a substitute for execution tracking.
 
-### 2. GitHub Issues
+### 2. Linear
 
-Use GitHub Issues for:
+Use Linear for:
 
 - bugs
 - projects / epics
@@ -43,17 +43,7 @@ Use GitHub Issues for:
 - workflow improvements
 - operational incidents that need follow-through
 
-If work matters, it should have an issue.
-
-### 3. GitHub Project
-
-Use the GitHub Project board as the live operating board.
-
-Current board:
-
-- `bankst-os Platform Board`
-
-This is the shared view of what needs attention now.
+If work matters, it should have a Linear issue. Board: `linear.app/bankst-os/team/OS`
 
 ## Ground Rules
 
@@ -67,7 +57,7 @@ If it is:
 - user-visible
 - likely to take more than a quick isolated change
 
-then it should exist as a GitHub Issue.
+then it should exist as a Linear issue.
 
 ### Rule 2: Cross-repo work starts from the board
 
@@ -78,7 +68,7 @@ If work spans:
 - transport and runtime
 - docs and implementation
 
-start from the GitHub board, not from ad hoc repo-local notes.
+start from the Linear board, not from ad hoc repo-local notes.
 
 ### Rule 3: Every issue needs an owner and a next step
 
@@ -101,7 +91,7 @@ Current team model:
 
 This means:
 
-- GitHub issue assignee = accountable human owner
+- Linear issue assignee = accountable human owner
 - agents may investigate, implement, review, or document
 - agents do not replace the accountable owner field
 
@@ -171,7 +161,7 @@ This is what makes the system navigable.
 ### Rule 7: The board is the live view; markdown is the reference layer
 
 Markdown explains the system.
-GitHub shows what is happening now.
+Linear shows what is happening now.
 
 Do not let markdown become a second unofficial issue tracker.
 
@@ -209,14 +199,14 @@ file or update an issue immediately.
 Agents should:
 
 - check `platform-docs` first for system context
-- use the GitHub board/issue system when the task is cross-repo or system-level
+- use Linear when the task is cross-repo or system-level
 - avoid inventing alternate naming or alternate tracking systems
 - update docs only where they are the correct source of truth
 
 Agents should not:
 
 - treat stale local mirrors as authoritative
-- create shadow project plans outside the GitHub board without a reason
+- create shadow project plans outside Linear without a reason
 - bury system risks in code comments or chat only
 
 ## Recommended Operating Rhythm
