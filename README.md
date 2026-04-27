@@ -11,6 +11,7 @@ This repo is the macro view of the system. It is the neutral reference point acr
 
 ## Primary Docs
 
+- [CONTROL_PLANE.md](./CONTROL_PLANE.md) - explicit definition of the shared operating layer across repos, devices, humans, and agents
 - [BOOTSTRAP.md](./BOOTSTRAP.md) - device-neutral startup pointer to the canonical context layer
 - [ONBOARDING.md](./ONBOARDING.md) - minimal startup reference for humans and agents
 - [CONTEXT_TREE.md](./CONTEXT_TREE.md) - staged reading paths for efficient agent and human navigation
