@@ -21,4 +21,4 @@ Agent completion report → Linear issue comment → human triage → if pattern
 
 ## Index
 
-(empty — populate as patterns are confirmed from agent completion reports)
+- [Obsidian Inbox Verbatim Intake](./OBSIDIAN_INBOX_VERBATIM_INTAKE.md) - paste-through workflow for user-supplied candidate notes and firm-confirmed inbox filenames
