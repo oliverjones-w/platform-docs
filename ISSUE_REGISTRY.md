@@ -1,6 +1,6 @@
 # Issue Registry
 
-Last updated: 2026-04-28
+Last updated: 2026-04-29
 
 This file is the durable registry for system-level issues across the Dell / Mac / public-edge stack.
 
@@ -118,6 +118,36 @@ Every issue should carry all of these fields:
 - `Resolution:` `Invoke-LoggedCommand` now sets `$ErrorActionPreference = 'Continue'` locally and explicitly casts `ErrorRecord` objects to strings when logging. Exit code is checked explicitly. Fixed in `sync_and_push.ps1` 2026-04-27. Verified full sync completes cleanly.
 - `Closed:` 2026-04-27
 - `Board Project:` PROJ-002
+
+### SYS-006 — MappingToolsSync Terminal Window Steals Focus During Hourly Sync
+
+- `Class:` Workflow, Reliability
+- `Severity:` Medium
+- `Status:` Closed
+- `Environment:` Dell
+- `Owner:` Unassigned
+- `Detected In:` `MappingToolsSync` scheduled task and `mapping_tools/scripts/register_task.ps1` on 2026-04-29
+- `Impact:` The hourly HF / IR map sync could pop a visible terminal window and steal user focus even when no intervention was needed.
+- `Trigger / Failure Mode:` Task Scheduler launched PowerShell directly for `sync_and_push.ps1`; `-WindowStyle Hidden` was not sufficient to guarantee a non-disruptive unattended run.
+- `Resolution:` Added `mapping_tools/scripts/launch_sync_hidden.vbs` and changed `register_task.ps1` so the scheduled task runs `wscript.exe //B` against that hidden launcher. The launcher runs `sync_and_push.ps1` with window style `0` and waits for completion so Task Scheduler still tracks overlap. Also hardened the sync path by rotating `sync.log`, writing UTF-8 logs, and making Excel read failures raise instead of allowing stale DB pushes. Verified the live scheduled task action points to `wscript.exe`.
+- `Closed:` 2026-04-29
+- `Linear Issue:` OS-34
+- `Board Project:` PROJ-002
+
+### SYS-007 — Obsidian Candidate `raw.md` Duplication Corrupted Active Source History
+
+- `Class:` Reliability, Data, Workflow
+- `Severity:` High
+- `Status:` Closed
+- `Environment:` Dell
+- `Owner:` Unassigned
+- `Detected In:` `C:\obsidian-vault\work\Candidate Notes\Kai Lu (Barclays)\raw.md` on 2026-04-29
+- `Impact:` Candidate source history could inflate into multi-megabyte duplicated files, making profile reprocessing fragile, expensive, and harder to audit.
+- `Trigger / Failure Mode:` The old aggregate `raw.md` model used a single file as both durable evidence store and processing source. If repeated raw history entered the inbox or active source path, the processor had no guard against accepting it as new evidence.
+- `Resolution:` Replaced the active write model with dated immutable `sources/*.md` files, kept `raw.md` as legacy read-only history, added duplicate/self-append guards, added `audit_raw_duplication.py`, and repaired 10 duplicated legacy raw files with timestamped backups via `repair_raw_duplication.py`.
+- `Closed:` 2026-04-29
+- `Runbook / Incident Note:` `RUNBOOKS/OBSIDIAN_RAW_DUPLICATION_INCIDENT_2026-04-29.md`
+- `Linear Issue:` OS-35 — https://linear.app/bankst-os/issue/OS-35/resolved-obsidian-candidate-rawmd-duplication-incident
 
 ## Intake Rules
 
