@@ -19,7 +19,7 @@ This repo is the macro context layer for `bankst-os`.
 | Auth / Cloudflare edge | `DECISIONS/ADR-002-auth-model.md` → `CLOUDFLARE_ACCESS.md` |
 | DB / Alembic migrations | `agent/INFRA_MAC.md` → Mac `~/workspace/apps/hf_returns_app/` |
 | Ops / incident | `agent/STATE.md` → `RUNBOOKS/` |
-| Active project or issue | Linear — `linear.app/bankst-os/team/OS` |
+| Active project or issue | `agent/STATE.md` → `agent/LINEAR.md` |
 | Unexpected behavior / debugging | `agent/GOTCHAS.md` |
 | Architecture decisions | `DECISIONS/` |
 
@@ -30,7 +30,8 @@ This repo is the macro context layer for `bankst-os`.
 | `agent/ENTRY.md` | Canonical names, machines, source-of-truth table — cross-repo orientation |
 | `agent/INFRA_MAC.md` | Mac services, ports, DBs, SSH — Mac-side tasks |
 | `agent/INFRA_DELL.md` | Dell paths, sync, automation — Dell-side tasks |
-| `agent/STATE.md` | Pointers to Linear board and runtime health snapshot |
+| `agent/STATE.md` | Linear board pointer, transport/auth rules, GraphQL operating rules |
+| `agent/LINEAR.md` | Linear write protocol — staging artifacts, write-back, pre-write checklist |
 | `agent/GOTCHAS.md` | System-specific traps — read when debugging unexpected behavior |
 
 ## Human reference

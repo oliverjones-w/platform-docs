@@ -22,3 +22,6 @@ Agent completion report → Linear issue comment → human triage → if pattern
 ## Index
 
 - [Obsidian Inbox Verbatim Intake](./OBSIDIAN_INBOX_VERBATIM_INTAKE.md) - paste-through workflow for user-supplied candidate notes and firm-confirmed inbox filenames
+- [Obsidian Call Note Command Intake](./OBSIDIAN_CALL_NOTE_COMMAND_INTAKE.md) - raw call-note preservation plus routing for pipeline actions, research tasks, and profile processing
+- [Obsidian Person Identity Gate](./OBSIDIAN_PERSON_IDENTITY_GATE.md) - human-gated workflow for mentioned people, approved wikilinks, and potential profile queues
+
